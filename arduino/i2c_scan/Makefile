@@ -7,6 +7,9 @@ AVRDUDE_ARD_BAUDRATE = 57600
 BOARD_TAG = atmega328p_bare
 BOARDS_TXT = ./bare_boards.txt
 
+ARDUINO_LIBS = Wire
+
+
 # USER_LIB_PATH = ./lib
 # ARDUINO_LIBS = Wire SPI SoftwareSerial RadioHead-1.81
 # AVRDUDE_CONF = ./avrdude_gpio.conf

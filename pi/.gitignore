@@ -1,0 +1,17 @@
+depcomp
+*.cache
+compile
+*.m4
+.deps
+Makefile
+*.in
+missing
+config.*
+configure
+*.o
+stamp-*
+install-sh
+
+#binaries
+i2ctest
+slavetest
