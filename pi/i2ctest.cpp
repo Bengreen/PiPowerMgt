@@ -60,6 +60,7 @@ Distributed as-is; no warranty is given.
 ******************************************************************************/
 
 #include <iostream>
+#include <iomanip>
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
@@ -68,34 +69,59 @@ Distributed as-is; no warranty is given.
 
 using namespace std;
 
-
 // TODO: Send a hello from the RaspebrryPI to the Arduino and respond from the Arduino with a hello.
-
 
 int main()
 {
-   int arduino, result=0;
+   int arduino, result = 0;
 
    // Initialize the interface by giving it an external device ID.
    // The MCP4725 defaults to address 0x60.
    //
    // It returns a standard file descriptor.
    //
-   arduino = wiringPiI2CSetup(0x04);
+   arduino = wiringPiI2CSetup(0x03);
 
-   cout << "Init result: "<< arduino << endl;
+   cout << "Init result: " << arduino << endl;
 
-   // result = wiringPiI2CWrite(arduino,21);
+   {
+      const char *helloString = "Hello";
+      int numSent = write(arduino, helloString, 6);
+      cout << "Send " << numSent << endl;
+   }
 
-   const char* helloString = "Hello";
-   write(arduino,helloString,6);
+   cout << "Fetching data form arduino" << endl;
+   {
+      char replyString[16];
+      int numReads = read(arduino, replyString, 5);
+      cout << "have read " << numReads << "characters ";
+      cout << hex << setfill('0') << setw(2);
 
-   cout<<"Fetching data form arduino"<<endl;
+      for (int i = 0; i < numReads; ++i)
+      {
+         cout << (int)replyString[i] << " ";
+      }
+      cout << endl;
+   }
 
-   char replyString[16];
-   read(arduino,replyString,5);
-   replyString[6]='\0';
-   cout<<"read:"<<replyString<<endl;
+   {
+      const char request[] = {0x13};
+      int numSent = write(arduino, request, 1);
+      cout << "Send " << numSent << endl;
+      usleep(300);
+   }
+   {
+      char replyString[16];
+      int numReads = read(arduino, replyString, 5);
+      cout << "have read " << numReads << "characters ";
+      cout << hex << setfill('0') << setw(2);
+
+      for (int i = 0; i < numReads; ++i)
+      {
+         cout << (int)replyString[i] << " ";
+      }
+      cout << endl;
+   }
 
    // for(int i = 0; i < 0x0000ffff; i++)
    // {
