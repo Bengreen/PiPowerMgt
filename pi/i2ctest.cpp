@@ -80,7 +80,7 @@ int main()
    //
    // It returns a standard file descriptor.
    //
-   arduino = wiringPiI2CSetup(0x03);
+   arduino = wiringPiI2CSetup(0x08);
 
    cout << "Init result: " << arduino << endl;
 
@@ -90,38 +90,38 @@ int main()
       cout << "Send " << numSent << endl;
    }
 
-   cout << "Fetching data form arduino" << endl;
-   {
-      char replyString[16];
-      int numReads = read(arduino, replyString, 5);
-      cout << "have read " << numReads << "characters ";
-      cout << hex << setfill('0') << setw(2);
+   // cout << "Fetching data form arduino" << endl;
+   // {
+   //    char replyString[16];
+   //    int numReads = read(arduino, replyString, 5);
+   //    cout << "have read " << numReads << "characters ";
+   //    cout << hex << setfill('0') << setw(2);
 
-      for (int i = 0; i < numReads; ++i)
-      {
-         cout << (int)replyString[i] << " ";
-      }
-      cout << endl;
-   }
+   //    for (int i = 0; i < numReads; ++i)
+   //    {
+   //       cout << (int)replyString[i] << " ";
+   //    }
+   //    cout << endl;
+   // }
 
-   {
-      const char request[] = {0x13};
-      int numSent = write(arduino, request, 1);
-      cout << "Send " << numSent << endl;
-      usleep(300);
-   }
-   {
-      char replyString[16];
-      int numReads = read(arduino, replyString, 5);
-      cout << "have read " << numReads << "characters ";
-      cout << hex << setfill('0') << setw(2);
+   // {
+   //    const char request[] = {0x13};
+   //    int numSent = write(arduino, request, 1);
+   //    cout << "Send " << numSent << endl;
+   //    usleep(300);
+   // }
+   // {
+   //    char replyString[16];
+   //    int numReads = read(arduino, replyString, 5);
+   //    cout << "have read " << numReads << "characters ";
+   //    cout << hex << setfill('0') << setw(2);
 
-      for (int i = 0; i < numReads; ++i)
-      {
-         cout << (int)replyString[i] << " ";
-      }
-      cout << endl;
-   }
+   //    for (int i = 0; i < numReads; ++i)
+   //    {
+   //       cout << (int)replyString[i] << " ";
+   //    }
+   //    cout << endl;
+   // }
 
    // for(int i = 0; i < 0x0000ffff; i++)
    // {

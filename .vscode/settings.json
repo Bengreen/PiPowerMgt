@@ -9,6 +9,8 @@
         "vector": "cpp",
         "string_view": "cpp",
         "initializer_list": "cpp",
-        "iosfwd": "cpp"
-    }
+        "iosfwd": "cpp",
+        "*.ino": "cpp"
+    },
+    "C_Cpp.default.includePath": []
 }

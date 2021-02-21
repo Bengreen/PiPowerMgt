@@ -1,23 +1,35 @@
+
 #include <Wire.h>
+
+// function that executes whenever data is received from master
+// this function is registered as an event, see setup()
+void receiveEvent(int howMany)
+{
+    while (Wire.available())
+    {                         // loop through all but the last
+        char c = Wire.read(); // receive byte as a character
+        Serial.print(c, HEX); // print the character
+    }
+    Serial.println("");
+}
+
+// function that executes whenever data is requested by master
+// this function is registered as an event, see setup()
+void requestEvent()
+{
+    Wire.write("hello "); // respond with message of 6 bytes
+                          // as expected by master
+}
 
 void setup()
 {
-    Wire.begin(); // join i2c bus as master
+    Wire.begin(8);                // join i2c bus with address #8
+    Wire.onReceive(receiveEvent); // register event
+    Wire.onRequest(requestEvent); // register event
+    Serial.begin(9600);           // start serial for output
 }
-
-char str[17];
-
-int x = 0;
 
 void loop()
 {
-    sprintf(str, "Message %7d\n", x);
-    if (++x > 9999999)
-        x = 0;
-
-    Wire.beginTransmission(9); // transmit to device #9
-    Wire.write(str);           // sends 16 bytes
-    Wire.endTransmission();    // stop transmitting
-
-    delay(50);
+    delay(100);
 }
