@@ -7,6 +7,8 @@
 #include <HardwareSerial.h>
 extern HardwareSerial Serial;
 
+const int watchdogAddr = 0x08;
+
 struct ftask
 {
     task_t futureTask;
@@ -18,6 +20,7 @@ const int maxFutureActions(16);
 
 task_t immediate[maxImmediateActions] = {{action_t::NONE, 0}};
 task_t ftask[maxFutureActions];
+char i2cBuffer[BUFFER_LENGTH];
 
 const int maxPis = 4;
 pi pis[maxPis] = {
@@ -30,12 +33,39 @@ pi pis[maxPis] = {
 // this function is registered as an event, see setup()
 void receiveEvent(int howMany)
 {
+    int index = 0;
+
     while (Wire.available())
-    {                         // loop through all but the last
+    {
         char c = Wire.read(); // receive byte as a character
         Serial.print(c, HEX); // print the character
+
+        i2cBuffer[index] = c;
+        Serial.print(" ");
+        Serial.println((int)&i2cBuffer[index]);
+        ++index;
     }
     Serial.println("");
+
+    message_t *myMessage = (message_t *)i2cBuffer;
+    Serial.println((int)sizeof(int));
+    Serial.println((int)sizeof(message_t));
+
+    Serial.print((int)myMessage);
+    Serial.print(":");
+    Serial.println((int)i2cBuffer);
+
+    Serial.print("Message is ");
+    Serial.println((int)(myMessage->command));
+    Serial.print("ACTION IS ");
+    Serial.println((int)(myMessage->payload.task.action));
+    Serial.print("id is ");
+    Serial.println((int)myMessage->payload.task.id);
+
+    if (myMessage->command == command_t::TASK)
+    {
+        addAction(immediate, maxImmediateActions, myMessage->payload.task.id, action_t(myMessage->payload.task.action));
+    }
 }
 
 // function that executes whenever data is requested by master
@@ -59,7 +89,7 @@ void setup()
         statusDump(pis[index]);
         Serial.println("");
     }
-    Wire.begin(8);                // join i2c bus with address #8
+    Wire.begin(watchdogAddr);     // join i2c bus with address
     Wire.onReceive(receiveEvent); // register event
     Wire.onRequest(requestEvent); // register event
 

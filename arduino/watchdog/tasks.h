@@ -1,12 +1,13 @@
 #ifndef TASKS_H
 #define TASKS_H
+#include <stdint.h>
 #include "pi.h"
 #include "actions.h"
 
 struct task_t
 {
-    action_t action;
-    int id;
+    uint8_t action;
+    uint8_t id;
 };
 
 void processTasks(pi *pis, task_t *tasklist, int count);

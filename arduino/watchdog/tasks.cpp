@@ -38,7 +38,7 @@ void processTasks(pi *pis, task_t *tasklist, int count)
             Serial.print(tasklist[index].id);
             Serial.print(" -> ");
             Serial.println(int(tasklist[index].action));
-            piAction(pis[tasklist[index].id], tasklist[index].action);
+            piAction(pis[tasklist[index].id], action_t(tasklist[index].action));
             break;
         default:
             Serial.print(index);

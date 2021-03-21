@@ -39,3 +39,5 @@ BUT on other hand it coudl be efficient and neat to implement with good service 
 
 So consider to create two task lists. One is the list of future tasks and the other is the list of immediate tasks to do.
 
+# Help
+How to exit `monitor` CTRL-a k followed by y

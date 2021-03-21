@@ -11,9 +11,14 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CONFIG_SRCDIR([i2ctest.cpp])
 AC_CONFIG_HEADERS([config.h])
 
+AC_CONFIG_MACRO_DIRS([m4])
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
+# AC_PROG_RANLIB
+
+LT_INIT
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lwiringPi':

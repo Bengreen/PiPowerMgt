@@ -65,7 +65,7 @@ Distributed as-is; no warranty is given.
 #include <unistd.h>
 #include <errno.h>
 #include <wiringPiI2C.h>
-#include "payload.h"
+// #include "payload.h"
 
 using namespace std;
 

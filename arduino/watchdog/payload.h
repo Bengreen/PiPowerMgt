@@ -2,20 +2,20 @@
 #define PAYLOAD_H
 #include "tasks.h"
 
-enum class command_t
+typedef enum
 {
     TASK,
-};
+} command_t;
 
 union payload_t
 {
     task_t task;
 };
 
-struct
+struct message_t
 {
-    command_t command;
+    uint8_t command;
     union payload_t payload;
-} message_t;
+};
 
 #endif
