@@ -40,7 +40,6 @@ def watchdogd(watchdogAddress: int, id: int, on: int, off: int, sleepinterval: i
     print(f"Initial temperature is {temp/1000}")
 
     while running:
-        print(f"Kicking dog")
 
         watchdog.powerOff(id)
         sleep(2)
@@ -59,7 +58,9 @@ def watchdogd(watchdogAddress: int, id: int, on: int, off: int, sleepinterval: i
         if fanState:
             print(f"Temp high (temp={temp/1000})")
 
-        watchdog.powerOn(id)
+        watchdog.kickDog(id)
+        print(f"Kicked dog")
+
         sleep(sleepinterval)
 
     print(f"Exiting")

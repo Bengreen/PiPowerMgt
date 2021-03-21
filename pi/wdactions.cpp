@@ -58,4 +58,13 @@ extern "C"
                     .id = id}}};
         return message;
     }
+    message_t kickDogMessage(uint8_t id)
+    {
+        message_t message = {
+            .command = command_t::KICK,
+            .payload = {
+                .kick = {
+                    .id = id}}};
+        return message;
+    }
 };

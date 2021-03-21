@@ -62,10 +62,19 @@ void receiveEvent(int howMany)
     Serial.print("id is ");
     Serial.println((int)myMessage->payload.task.id);
 
-    if (myMessage->command == command_t::TASK)
+    switch (myMessage->command)
     {
+    case command_t::TASK:
         addAction(immediate, maxImmediateActions, myMessage->payload.task.id, action_t(myMessage->payload.task.action));
+        break;
+    default:
+        Serial.println("Unhandled message");
+        break;
     }
+    // if (myMessage->command == command_t::TASK)
+    // {
+    //     addAction(immediate, maxImmediateActions, myMessage->payload.task.id, action_t(myMessage->payload.task.action));
+    // }
 }
 
 // function that executes whenever data is requested by master

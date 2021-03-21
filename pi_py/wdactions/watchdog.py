@@ -26,6 +26,10 @@ class PiWatchDog:
     def powerOffMessage(cls, id: int):
         return _libwdactions.powerOffMessage(c_uint8(id))
 
+    @classmethod
+    def kickDogMessage(cls, id: int):
+        return _libwdactions.kickDogMessage(c_uint8(id))
+
     def _sendMessage(self, message):
         return _libwdactions.sendMessage(self.watchdog, message)
 
@@ -40,6 +44,11 @@ class PiWatchDog:
 
     def powerOff(self, id: int):
         self._sendMessage(self.powerOffMessage(id))
+
+    def kickDog(self, id: int):
+        self.powerOn(id)
+        # print(f'I do not know how to kick a dog yet')
+        self._sendMessage(self.kickDogMessage(id))
 
 
 if __name__ == "__main__":
