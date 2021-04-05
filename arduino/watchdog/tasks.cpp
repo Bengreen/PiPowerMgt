@@ -1,51 +1,66 @@
 #include "tasks.h"
 #include "pi.h"
+#include "payload.h"
 #include <HardwareSerial.h>
+#include <Arduino.h>
 extern HardwareSerial Serial;
 
-void addAction(task_t *tasklist, int maxImmediateActions, int id, action_t action)
+void addTask(fTask_t *tasks, int maxTasks, task_t task, unsigned long time)
 {
-    for (int index = 0; index < maxImmediateActions; ++index)
+    for (int index = 0; index < maxTasks; ++index)
     {
-        Serial.println(index);
-        if (tasklist[index].action == action_t::NONE)
+        if (tasks[index].task.action == action_t::NONE)
         {
-            tasklist[index].action = action;
-            tasklist[index].id = id;
+            tasks[index].task = task;
+            Serial.print("[");
             Serial.print(index);
-            Serial.print(" <- [");
-            Serial.print(id);
-            Serial.print("] = ");
-            Serial.println(int(action));
-
+            Serial.print("] <- (");
+            Serial.print("x");
+            Serial.print(") = ");
+            Serial.println(int(task.action));
+            tasks[index].time = millis() + time;
             break;
         }
     }
 }
 
-void processTasks(pi *pis, task_t *tasklist, int count)
+unsigned long processTasks(pi *pis, fTask_t *tasks, int maxTasks, unsigned long tprev)
 {
-    for (int index = 0; index < count; ++index)
+    unsigned long tnow = millis();
+
+    for (int index = 0; index < maxTasks; ++index)
     {
-        switch (tasklist[index].action)
+        if ((tasks[index].time > tprev && tasks[index].time <= tnow) || (tnow < tprev && (tasks[index].time > tprev || tasks[index].time < tnow)))
         {
-        case action_t::NONE:
-            break;
-        case action_t::POWER_ON:
-        case action_t::POWER_OFF:
-        case action_t::FAN_ON:
-        case action_t::FAN_OFF:
-            Serial.print(tasklist[index].id);
-            Serial.print(" -> ");
-            Serial.println(int(tasklist[index].action));
-            piAction(pis[tasklist[index].id], action_t(tasklist[index].action));
-            break;
-        default:
-            Serial.print(index);
-            Serial.print(" ");
-            Serial.println("UNKNOWN");
-            break;
+            switch (tasks[index].task.action)
+            {
+            case action_t::NONE:
+                break;
+            case action_t::COMMAND_POWER_ON:
+            case action_t::COMMAND_POWER_OFF:
+            case action_t::COMMAND_FAN_ON:
+            case action_t::COMMAND_FAN_OFF:
+                Serial.print("[");
+                Serial.print(index);
+                Serial.print("] = (");
+                Serial.print(tasks[index].task.options.command.id);
+                Serial.print(") -> ACTION - ");
+                Serial.println(int(tasks[index].task.action));
+                piAction(pis[tasks[index].task.options.command.id], action_t(tasks[index].task.action));
+                break;
+            default:
+                Serial.println("DONT KNOW HOW TO DEAL WITH THIS TASK");
+                Serial.print("[");
+                Serial.print(index);
+                Serial.print("] = (");
+                Serial.print(tasks[index].task.options.command.id);
+                Serial.print(") -> ");
+                Serial.println(int(tasks[index].task.action));
+                break;
+            }
+            //Clear tasks regardless of success
+            tasks[index].task.action = action_t::NONE;
         }
-        tasklist[index].action = action_t::NONE;
     }
+    return tnow;
 }

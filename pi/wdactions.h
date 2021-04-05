@@ -5,14 +5,16 @@
 
 extern "C"
 {
+    typedef int watchdogId_t;
 
-    typedef int watchdog_t;
-
-    watchdog_t createWatchdog(int watchdogAddress);
-    int sendMessage(watchdog_t watchdog, message_t message);
-    message_t fanOnMessage(uint8_t id);
-    message_t fanOffMessage(uint8_t id);
-    message_t powerOnMessage(uint8_t id);
-    message_t powerOffMessage(uint8_t id);
+    watchdogId_t createWatchdog(int watchdogAddress);
+    int fanOn(watchdogId_t watchdog, uint8_t id, uint16_t wait);
+    int fanOff(watchdogId_t watchdog, uint8_t id, uint16_t wait);
+    int powerOn(watchdogId_t watchdog, uint8_t id, uint16_t wait);
+    int powerOff(watchdogId_t watchdog, uint8_t id, uint16_t wait);
+    int configTimeout(watchdogId_t watchdog, uint8_t id, uint16_t timeout, uint16_t wait);
+    int configCycleTime(watchdogId_t watchdog, uint8_t id, uint16_t cycleTime, uint16_t wait);
+    int configFanIO(watchdogId_t watchdog, uint8_t id, uint8_t io, uint16_t wait);
+    int configPowerIO(watchdogId_t watchdog, uint8_t id, uint8_t io, uint16_t wait);
 };
 #endif

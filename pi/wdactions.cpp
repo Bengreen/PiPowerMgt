@@ -7,64 +7,122 @@
 extern "C"
 {
 
-    watchdog_t createWatchdog(int watchdogAddress)
+    watchdogId_t createWatchdog(int watchdogAddress)
     {
         return wiringPiI2CSetup(watchdogAddress);
     }
 
-    int sendMessage(watchdog_t watchdog, message_t message)
+    // int sendMessage(watchdogId_t watchdog, task_t message)
+    // {
+    //     return write(watchdog, &message, sizeof(task_t));
+    // }
+    // int fanOnFake(uint8_t id, uint16_t wait)
+    // {
+    //     task_t message = {
+    //         .action = action_t::COMMAND_FAN_ON,
+    //         .wait = wait,
+    //         .options = {.command = {.id = id}}};
+    //     return 0;
+    // }
+    int fanOn(watchdogId_t watchdog, uint8_t id, uint16_t wait)
     {
-        return write(watchdog, &message, sizeof(message_t));
+        task_t message = {
+            .action = action_t::COMMAND_FAN_ON,
+            .wait = wait,
+            .options = {.command = {.id = id}}};
+        return write(watchdog, &message, sizeof(task_t));
     }
 
-    message_t fanOnMessage(uint8_t id)
+    int fanOff(watchdogId_t watchdog, uint8_t id, uint16_t wait)
     {
-        message_t message = {
-            .command = command_t::TASK,
-            .payload = {
-                .task = {
-                    .action = action_t::FAN_ON,
-                    .id = id}}};
-        return message;
+        task_t message = {
+            .action = action_t::COMMAND_FAN_OFF,
+            .wait = wait,
+            .options = {.command = {.id = id}}};
+        return write(watchdog, &message, sizeof(task_t));
     }
+    int powerOn(watchdogId_t watchdog, uint8_t id, uint16_t wait)
+    {
+        task_t message = {
+            .action = action_t::COMMAND_POWER_ON,
+            .wait = wait,
+            .options = {.command = {.id = id}}};
+        return write(watchdog, &message, sizeof(task_t));
+    }
+    int powerOff(watchdogId_t watchdog, uint8_t id, uint16_t wait)
+    {
+        task_t message = {
+            .action = action_t::COMMAND_POWER_ON,
+            .wait = wait,
+            .options = {.command = {.id = id}}};
+        return write(watchdog, &message, sizeof(task_t));
+    }
+    int kickDog(watchdogId_t watchdog, uint8_t id, uint16_t wait)
+    {
+        task_t message = {
+            .action = action_t::WATCHDOG_KICK,
+            .wait = wait,
+            .options = {.watchdog = {.id = id}}};
+        return write(watchdog, &message, sizeof(task_t));
+    }
+    int configTimeout(watchdogId_t watchdog, uint8_t id, uint16_t timeout, uint16_t wait)
+    {
+        task_t message = {
+            .action = action_t::CONFIG_TIMEOUT,
+            .wait = wait,
+            .options = {
+                .config = {
+                    .id = id,
+                    .params = {.timeout = timeout},
 
-    message_t fanOffMessage(uint8_t id)
-    {
-        message_t message = {
-            .command = command_t::TASK,
-            .payload = {
-                .task = {
-                    .action = action_t::FAN_OFF,
-                    .id = id}}};
-        return message;
+                },
+            },
+        };
+        return write(watchdog, &message, sizeof(task_t));
     }
-    message_t powerOnMessage(uint8_t id)
+    int configCycleTime(watchdogId_t watchdog, uint8_t id, uint16_t cycleTime, uint16_t wait)
     {
-        message_t message = {
-            .command = command_t::TASK,
-            .payload = {
-                .task = {
-                    .action = action_t::POWER_ON,
-                    .id = id}}};
-        return message;
+        task_t message = {
+            .action = action_t::CONFIG_CYCLETIME,
+            .wait = wait,
+            .options = {
+                .config = {
+                    .id = id,
+                    .params = {.cycleTime = cycleTime},
+
+                },
+            },
+        };
+        return write(watchdog, &message, sizeof(task_t));
     }
-    message_t powerOffMessage(uint8_t id)
+    int configFanIO(watchdogId_t watchdog, uint8_t id, uint8_t io, uint16_t wait)
     {
-        message_t message = {
-            .command = command_t::TASK,
-            .payload = {
-                .task = {
-                    .action = action_t::POWER_OFF,
-                    .id = id}}};
-        return message;
+        task_t message = {
+            .action = action_t::CONFIG_FAN,
+            .wait = wait,
+            .options = {
+                .config = {
+                    .id = id,
+                    .params = {.fanIO = io},
+
+                },
+            },
+        };
+        return write(watchdog, &message, sizeof(task_t));
     }
-    message_t kickDogMessage(uint8_t id)
+    int configPowerIO(watchdogId_t watchdog, uint8_t id, uint8_t io, uint16_t wait)
     {
-        message_t message = {
-            .command = command_t::KICK,
-            .payload = {
-                .kick = {
-                    .id = id}}};
-        return message;
+        task_t message = {
+            .action = action_t::CONFIG_POWER,
+            .wait = wait,
+            .options = {
+                .config = {
+                    .id = id,
+                    .params = {.powerIO = io},
+
+                },
+            },
+        };
+        return write(watchdog, &message, sizeof(task_t));
     }
 };

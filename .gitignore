@@ -1,6 +1,7 @@
 # Python venv
 venv
-
+**/.DS_Store
+**/._.DS_Store
 # Prerequisites
 *.d
 
@@ -33,3 +34,5 @@ venv
 *.exe
 *.out
 *.app
+pi/wdactions_test
+pi/wdactions_libtest

@@ -82,7 +82,7 @@ int main()
 {
     int arduino, result = 0;
 
-    watchdog_t watchdog = createWatchdog(watchdogAddr);
-    message_t myFanOn = fanOffMessage(0);
-    std::cout << "Sent bytes = " << sendMessage(watchdog, myFanOn) << std::endl;
+    watchdogId_t watchdog = createWatchdog(watchdogAddr);
+
+    std::cout << "Sent bytes = " << fanOff(watchdog, 0, 0) << std::endl;
 }

@@ -7,16 +7,13 @@ AM_CFLAGS = --pedantic -Wall -O2
 AM_LDFLAGS =
 
 
-bin_PROGRAMS = i2ctest slavetest wdactions_test wdactions_libtest
+bin_PROGRAMS = i2ctest slavetest wdactions_libtest
 lib_LTLIBRARIES = libwdactions.la
 
 
 libwdactions_la_SOURCES = wdactions.cpp
 libwdactions_la_LDFLAGS = -version-info 0:0:0
 
-
-wdactions_test_CPPFLAGS = -I$(srcdir)/..
-wdactions_test_SOURCES = wdactions_test.cpp
 
 
 wdactions_libtest_CPPFLAGS = -I$(srcdir)/..

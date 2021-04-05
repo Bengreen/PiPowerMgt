@@ -12,5 +12,6 @@
         "iosfwd": "cpp",
         "*.ino": "cpp"
     },
-    "C_Cpp.default.includePath": []
+    "C_Cpp.default.includePath": [],
+    "C_Cpp.errorSquiggles": "Enabled"
 }

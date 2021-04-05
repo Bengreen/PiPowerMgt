@@ -2,15 +2,9 @@
 #define TASKS_H
 #include <stdint.h>
 #include "pi.h"
-#include "actions.h"
+#include "payload.h"
 
-struct task_t
-{
-    uint8_t action;
-    uint8_t id;
-};
-
-void processTasks(pi *pis, task_t *tasklist, int count);
-void addAction(task_t *tasklist, int maxImmediateActions, int id, action_t action);
+void addTask(fTask_t *tasks, int maxTasks, task_t task, unsigned long time = 0);
+unsigned long processTasks(pi *pis, fTask_t *tasks, int maxTasks, unsigned long tprev);
 
 #endif

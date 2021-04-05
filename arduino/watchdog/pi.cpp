@@ -1,6 +1,6 @@
 #include "pi.h"
 #include <Arduino.h>
-#include "tasks.h"
+#include "payload.h"
 
 #include <HardwareSerial.h>
 extern HardwareSerial Serial;
@@ -12,7 +12,9 @@ void statusDump(const pi &myPi)
     Serial.print(" ");
     Serial.print(myPi.powerIO);
     Serial.print(" ");
-    Serial.print(myPi.watchdogDeadline);
+    Serial.print(myPi.timeout);
+    Serial.print(" ");
+    Serial.print(myPi.cycleTime);
     Serial.print(" ");
     Serial.print(myPi.watchdog ? "WD" : "  ");
     Serial.print(" ");
@@ -23,16 +25,16 @@ void piAction(pi &myPi, action_t action)
 {
     switch (action)
     {
-    case action_t::POWER_ON:
+    case action_t::COMMAND_POWER_ON:
         powerOn(myPi);
         break;
-    case action_t::POWER_OFF:
+    case action_t::COMMAND_POWER_OFF:
         powerOff(myPi);
         break;
-    case action_t::FAN_ON:
+    case action_t::COMMAND_FAN_ON:
         fanOn(myPi);
         break;
-    case action_t::FAN_OFF:
+    case action_t::COMMAND_FAN_OFF:
         fanOff(myPi);
         break;
     default:
@@ -65,4 +67,27 @@ void initPi(pi &myPi)
 
     pinMode(myPi.fanIO, OUTPUT);
     powerOff(myPi);
+}
+
+void config(pi &myPi, task_t &task)
+{
+    switch (task.action)
+    {
+    case action_t::CONFIG_FAN:
+        myPi.fanIO = task.options.config.params.fanIO;
+        break;
+    case action_t::CONFIG_POWER:
+        myPi.powerIO = task.options.config.params.powerIO;
+        break;
+    case action_t::CONFIG_TIMEOUT:
+        myPi.timeout = task.options.config.params.timeout;
+        break;
+    case action_t::CONFIG_CYCLETIME:
+        myPi.cycleTime = task.options.config.params.cycleTime;
+        break;
+    }
+}
+
+void watchDog(pi &myPi, watchdog_t &watchdog)
+{
 }

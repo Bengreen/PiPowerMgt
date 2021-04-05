@@ -1,6 +1,6 @@
 #ifndef PI_H
 #define PI_H
-#include "actions.h"
+#include "payload.h"
 
 enum class powerState_t
 {
@@ -14,7 +14,8 @@ struct pi
 {
     int fanIO;
     int powerIO;
-    int watchdogDeadline;
+    int timeout;
+    int cycleTime;
     bool watchdog;
     powerState_t powerState;
 };
@@ -27,4 +28,6 @@ void powerOn(pi &myPi);
 void powerOff(pi &myPi);
 void piAction(pi &myPi, action_t action);
 
+void config(pi &myPi, config_t &config);
+void watchDog(pi &myPi, watchdog_t &watchdog);
 #endif
